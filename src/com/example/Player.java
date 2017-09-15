@@ -56,11 +56,44 @@ public class Player
     }
     
     //---------------------------------------------------------------
-    //  Returns all the cards in a player's hand; mostly for testing
-    //  purposes at the moment
+    //  Returns all the cards in a Player's hand
     //---------------------------------------------------------------
     public String toString()
     {
-	return hand.toString();
+	String result = "";
+	for (int i = 0; i < hand.size(); i++)
+	{
+	    if (i == 0)
+	    {
+		result += hand.get(i);
+	    }
+	    else
+	    {
+		result += ", " + hand.get(i);
+	    }
+	}
+	
+	return result;
+    }
+    
+    //---------------------------------------------------------------
+    //  Returns all the cards in the player's hand, minus the first
+    //---------------------------------------------------------------
+    public String showing()
+    {
+	String result = "";
+	for (int i = 0; i < hand.size(); i++)
+	{
+	    if (i == 0)
+	    {
+		result += "an unknown card";
+	    }
+	    else
+	    {
+		result += ", " + hand.get(i);
+	    }
+	}
+	
+	return result;
     }
 }
