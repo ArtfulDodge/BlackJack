@@ -54,10 +54,10 @@ public class Deck
 	return d;
     }
     
-    //----------------------------------------------------------------
+    //---------------------------------------------------------------
     //  Returns the Card at deck[deckIndex] and increments deckIndex 
     //  to simulated drawing a card from the top of the deck.
-    //----------------------------------------------------------------
+    //---------------------------------------------------------------
     public Card draw()
     {
 	deckIndex++;

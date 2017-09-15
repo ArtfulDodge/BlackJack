@@ -13,5 +13,22 @@ public class Main
 	d.Shuffle();
 	System.out.println();
 	System.out.println(d);
+	
+	Player p = new Player();
+	p.hit(d);
+	System.out.println(p);
+	System.out.println(p.getHandValue());
+	p.hit(d);
+	System.out.println(p);
+	System.out.println(p.getHandValue());
+	p.hit(d);
+	System.out.println(p);
+	System.out.println(p.getHandValue());
+	p.hit(d);
+	System.out.println(p);
+	System.out.println(p.getHandValue());
+	p.hit(d);
+	System.out.println(p);
+	System.out.println(p.getHandValue());
     }
 }
