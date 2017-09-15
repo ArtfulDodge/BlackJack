@@ -27,7 +27,7 @@ public class Player
     //  blackjack. Changes the values of aces from 11 to 1 
     //  automatically to avoid busting.
     //---------------------------------------------------------------
-    public int getHandValue()
+    public int handValue()
     {
 	int value = 0;
 	int aces = 0;
@@ -56,7 +56,42 @@ public class Player
     }
     
     //---------------------------------------------------------------
-    //  Returns all the cards in a Player's hand
+    //  Returns the value of the Player's hand, minus the first 
+    //  Card
+    //---------------------------------------------------------------
+    public int showingValue()
+    {
+	int value = 0;
+	int aces = 0;
+	for (Card i: hand)
+	{
+	    if(hand.indexOf(i) == 0)
+	    {
+		value += 0;
+	    }else if(i.getValue() == 1)
+	    {
+		aces++;
+		value += 11;
+	    }else if(i.getValue() > 10)
+	    {
+		value += 10;
+	    }else
+	    {
+		value += i.getValue();
+	    }
+	    
+	    while(value > 21 && aces > 0)
+	    {
+		value -= 10;
+		aces -= 1;
+	    }
+	}
+	
+	return value;
+    }
+    
+    //---------------------------------------------------------------
+    //  Returns all the Cards in a Player's hand
     //---------------------------------------------------------------
     public String toString()
     {
@@ -77,7 +112,7 @@ public class Player
     }
     
     //---------------------------------------------------------------
-    //  Returns all the cards in the player's hand, minus the first
+    //  Returns all the Cards in the Player's hand, minus the first
     //---------------------------------------------------------------
     public String showing()
     {
@@ -95,5 +130,13 @@ public class Player
 	}
 	
 	return result;
+    }
+    
+    //---------------------------------------------------------------
+    //  Returns the number of Cards in hand
+    //---------------------------------------------------------------
+    public int cardsInHand()
+    {
+	return hand.size();
     }
 }
