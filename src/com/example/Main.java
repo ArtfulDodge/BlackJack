@@ -14,17 +14,19 @@ public class Main
 	Scanner scan = new Scanner(System.in);
 	
 	p.hit(d);
+	ai.hit(d);
+	
 	p.hit(d);
-	
-	ai.hit(d);
 	ai.hit(d);
 	
-	while(action.startsWith("h") && p.showingValue() < 21 && p.cardsInHand() < 5)
+	while(action.startsWith("h") && p.handValue() < 21)
 	{
 	    System.out.println("Your hand: " + p + ", value: " + p.handValue());
 	    System.out.println("Your opponent's hand: " + ai.showing() + ", value: " + ai.showingValue());
 	    System.out.println("Hit or Stand?");
 	    action = scan.nextLine();
+	    
+	    System.out.println();
 	    
 	    if (action.startsWith("h"))
 	    {
@@ -41,7 +43,7 @@ public class Main
 	    }
 	}
 	
-	while((ai.handValue() < p.showingValue() || ai.handValue() < 18) && ai.cardsInHand() < 5)
+	while(ai.handValue() <= p.handValue() || ai.handValue() < 18)
 	{
 	    System.out.println("Your hand: " + p + ", value: " + p.handValue());
 	    System.out.println("Your opponent's hand: " + ai.showing() + ", value: " + ai.showingValue());
