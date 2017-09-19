@@ -133,10 +133,34 @@ public class Player
     }
     
     //---------------------------------------------------------------
+    //  Returns the card at the desired index in hand
+    //---------------------------------------------------------------
+    public Card cardInPos(int index)
+    {
+	return hand.get(index);
+    }
+    
+    //---------------------------------------------------------------
     //  Returns the number of Cards in hand
     //---------------------------------------------------------------
     public int cardsInHand()
     {
 	return hand.size();
+    }
+    
+    //---------------------------------------------------------------
+    //  Removes the last card in the Player's hand.
+    //---------------------------------------------------------------
+    public void removeCard()
+    {
+	hand.remove(hand.size() - 1);
+    }
+    
+    //---------------------------------------------------------------
+    //  Adds a card to the Player's hand
+    //---------------------------------------------------------------
+    public void addCard(Card c)
+    {
+	hand.add(c);
     }
 }

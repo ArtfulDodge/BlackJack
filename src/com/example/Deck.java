@@ -55,6 +55,15 @@ public class Deck
     }
     
     //---------------------------------------------------------------
+    //  Simulates returning a card to the top of the deck by
+    //  subtracting one from deckIndex
+    //---------------------------------------------------------------
+    public void returnCard()
+    {
+	deckIndex--;
+    }
+    
+    //---------------------------------------------------------------
     //  Returns the Card at deck[deckIndex] and increments deckIndex 
     //  to simulated drawing a card from the top of the deck.
     //---------------------------------------------------------------
