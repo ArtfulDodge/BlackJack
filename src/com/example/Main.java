@@ -22,9 +22,17 @@ public class Main
 	{
 	    action = "hit";
 	    playHand();
-	    System.out.println("Play another hand? (y/n)");
-	    action = scan.nextLine();
-	    System.out.println();
+	    if (money > 0)
+	    {
+		System.out.println("Play another hand? (y/n)");
+		action = scan.nextLine();
+		System.out.println();
+	    } else
+	    {
+		action = "n";
+		TimeUnit.SECONDS.sleep(2);
+		System.out.println();
+	    }
 	}
 
 	System.out.println("Thanks for playing!");
@@ -37,19 +45,18 @@ public class Main
     // cause one of them to win.
     private static void aiVictory()
     {
-	System.out.println("Your opponent wins!");
+	System.out.println("Your opponent wins the pot!");
     }
 
     private static void pVictory()
     {
-	System.out.println("You win!");
+	System.out.println("You win the pot!");
 	money += 2 * bet;
     }
 
     // gameStatus() exists for readability reasons.
-    // imagine if everywhere you saw gameStatus() now you instead saw what was
-    // inside
-    // gameStatus(). It's awful, isn't it?
+    // Imagine if everywhere you saw gameStatus() now you instead saw what was
+    // inside gameStatus(). It's awful, isn't it?
     private static void gameStatus()
     {
 	if (split.cardsInHand() > 0)
@@ -93,7 +100,7 @@ public class Main
     private static void playHand() throws InterruptedException
     {
 	reset();
-	
+
 	System.out.println("You have $" + money + ".");
 	System.out.println("How much do you bet? (whole dollar amounts only)");
 	bet = scan2.nextInt();
@@ -103,19 +110,45 @@ public class Main
 	    TimeUnit.SECONDS.sleep(2);
 	    bet = money;
 	}
-	
+
 	money -= bet;
-	
+
 	System.out.println();
-	
+	System.out.println("The pot is now $" + bet);
+
+	TimeUnit.SECONDS.sleep(1);
+
+	System.out.println();
+
+	System.out.println("The AI matched your bet!");
+	System.out.println("The pot is now $" + 2 * bet);
+
+	System.out.println();
+
 	// Populating the player's hands
 	p.hit(d);
 	ai.hit(d);
 	p.hit(d);
 	ai.hit(d);
+	
+	if (p.handValue() == 21 && ai.handValue() != 21)
+	{
+	    gameStatus();
+	    System.out.print("Blackjack! ");
+	    pVictory();
+	    return;
+	}
+	
+	if (ai.handValue() == 21 && p.handValue() != 21)
+	{
+	    gameStatus();
+	    System.out.print("Blackjack! ");
+	    aiVictory();
+	    return;
+	}
 
 	action = "hit";
-	
+
 	// Loop that allows the player to actually play the game
 	// Detects what their desired action starts with instead of the whole word as a
 	// form of resilience against typos.
@@ -137,8 +170,16 @@ public class Main
 		    p.removeCard();
 		    p.hit(d);
 		    split.hit(d);
-		    money -= bet;
-		    bet *= 2;
+		    if (bet > money)
+		    {
+			System.out.println("Unable to double bet. Betting max amount.");
+			bet += money;
+			money = 0;
+		    } else
+		    {
+			money -= bet;
+			bet *= 2;
+		    }
 		}
 	    } else
 	    {
@@ -177,8 +218,7 @@ public class Main
 		}
 	    }
 	}
-	
-	
+
 	// Makes it a little less jarring if you get exactly 21.
 	// Before would just cut to next player/hand's turn with no time
 	// to process what just happened.
@@ -265,8 +305,8 @@ public class Main
 	// Checking to see who wins.
 	// Defaults to AI winning if the player doesn't win and it's not a draw.
 	// (In other words any wonky bullshit defaults to an AI victory)
-	if ((p.handValue() > ai.handValue() && p.handValue() <=21) || 
-		(split.handValue() > ai.handValue() && split.handValue() < 21))
+	if ((p.handValue() > ai.handValue() && p.handValue() <= 21)
+		|| (split.handValue() > ai.handValue() && split.handValue() < 21))
 	{
 	    pVictory();
 	    return;
