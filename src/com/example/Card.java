@@ -95,6 +95,28 @@ public class Card
     }
     
     //---------------------------------------------------------------
+    //  Returns the value of the card according to the rules of
+    //  Blackjack
+    //---------------------------------------------------------------
+    public int getBlackjackValue(Player p)
+    {
+	if (value > 10)
+	{
+	    return 10;
+	}
+	
+	if (value == 1)
+	{
+	    if (p.handValue() + 10 < 21)
+	    {
+		return 11;
+	    }
+	}
+	
+	return value;
+    }
+    
+    //---------------------------------------------------------------
     // Returns the face value (faceValue) of the Card
     // as a string.
     //---------------------------------------------------------------
