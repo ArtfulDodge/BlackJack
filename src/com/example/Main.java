@@ -163,12 +163,9 @@ public class Main
 
 	// Populating the player's hands
 	p.hit(d);
-	//ai.hit(d);
+	ai.hit(d);
 	p.hit(d);
-	//ai.hit(d);
-	ai.addCard(new Card(0, 1));
-	ai.addCard(new Card(1, 1));
-	ai.addCard(new Card(2, 9));
+	ai.hit(d);
 
 	if (p.handValue() == 21 && ai.handValue() != 21)
 	{
