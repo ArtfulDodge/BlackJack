@@ -73,11 +73,17 @@ public class Main
 		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
-	    } else
+	    } else if (ai.showingValue() >= 21)
 	    {
 		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
+	    } else
+	    {
+		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
+		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
+		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing +
+			" or " + ai.showingValue());
 	    }
 	} else
 	{
@@ -89,10 +95,15 @@ public class Main
 	    {
 		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
-	    } else
+	    } else if (ai.showingValue() >= 21)
 	    {
 		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
+	    } else
+	    {
+		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
+		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + 
+			" or " + ai.showingValue());
 	    }
 	}
     }
@@ -149,7 +160,11 @@ public class Main
 
 	System.out.println("You have $" + money + ".");
 	System.out.println("How much do you bet? (whole dollar amounts only)");
-	bet = scan2.nextInt();
+	action = scan.nextLine();
+	
+	bet = Integer.parseInt(action.replaceAll("[\\D]", ""));
+	
+	
 	if (bet > money)
 	{
 	    System.out.println("That bet is too large! Betting max amount instead.");
@@ -166,12 +181,17 @@ public class Main
 	ai.hit(d);
 	p.hit(d);
 	ai.hit(d);
-
+	
 	if (p.handValue() == 21 && ai.handValue() != 21)
 	{
 	    gameStatus();
 	    System.out.print("Blackjack! ");
 	    pVictory();
+	    return;
+	} else if (p.handValue() == 21 && ai.handValue() == 21)
+	{
+	    System.out.println("It's a draw!");
+	    money += bet;
 	    return;
 	}
 
@@ -260,12 +280,6 @@ public class Main
 	    }
 	}
 
-	// Makes it a little less jarring if you get exactly 21.
-	// Before would just cut to next player/hand's turn with no time
-	// to process what just happened.
-	gameStatus();
-	System.out.println();
-	TimeUnit.SECONDS.sleep(2);
 
 	// Plays the second hand if the player decided to split
 	if (split.cardsInHand() > 0)
@@ -351,6 +365,12 @@ public class Main
 	}
 	if (p.handValue() == ai.handValue() || split.handValue() == ai.handValue())
 	{
+	    if (ai.handValue() == 21 && ai.cardsInHand() == 2)
+	    {
+		System.out.print("Blackjack! ");
+		aiVictory();
+		return;
+	    }
 	    System.out.println("It's a draw!");
 	    money += bet;
 	    return;

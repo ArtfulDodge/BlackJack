@@ -107,7 +107,7 @@ public class Card
 	
 	if (value == 1)
 	{
-	    if (p.handValue() + 10 < 21)
+	    if (p.handValue() + 10 <= 21 || p.cardsInHand() == 2)
 	    {
 		return 11;
 	    }
