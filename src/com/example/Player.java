@@ -5,9 +5,10 @@ import java.util.*;
 public class Player
 {
     private  ArrayList<Card> hand = new ArrayList<Card>(); 
+    public int bet = 0;
     
     //---------------------------------------------------------------
-    //  Default constructor; Currently does nothing
+    //  Default constructor
     //---------------------------------------------------------------
     public Player()
     {

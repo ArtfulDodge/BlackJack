@@ -4,7 +4,7 @@ public class Deck
 {
     private Card[] deck;
 
-    private int deckIndex;
+    private int deckIndex = 0;
     
     //---------------------------------------------------------------
     //  Default constructor; Generates a complete deck of 52 unique
@@ -76,5 +76,13 @@ public class Deck
 	    return draw();
 	}
 	return deck[deckIndex - 1];
+    }
+    
+    //---------------------------------------------------------------
+    //  Returns how many cards have been used so far
+    //---------------------------------------------------------------
+    public int usedCards()
+    {
+	return deckIndex;
     }
 }
