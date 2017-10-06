@@ -90,7 +90,8 @@ public class Main
 	ai.hit(d);
 	p.hit(d);
 	ai.hit(d);
-
+	
+	// Detecting if the player wins by Blackjack
 	if (p.handValue() == 21 && ai.handValue() != 21)
 	{
 	    gameStatus();
@@ -413,19 +414,19 @@ public class Main
 	    {
 		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
-	    } else if (ai.showingValue() == acedShowing)
-	    {
-		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
 	    } else if (ai.showingValue() >= 21)
 	    {
 		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
-	    } else
+	    } else if (ai.showingValue() > acedShowing)
 	    {
 		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
 			+ ai.showingValue());
+	    } else 
+	    {
+		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
+		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
 	    }
 	}
     }

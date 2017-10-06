@@ -158,10 +158,20 @@ public class Player
     }
     
     //---------------------------------------------------------------
-    //  Adds a card to the Player's hand
+    //  Adds the specified Card to the Player's hand
     //---------------------------------------------------------------
     public void addCard(Card c)
     {
+	hand.add(c);
+    }
+    
+    //---------------------------------------------------------------
+    //  Creates a card with the specified suit and value and adds 
+    //  it to the player's hand
+    //---------------------------------------------------------------
+    public void addCard(int suit, int value)
+    {
+	Card c = new Card(suit, value);
 	hand.add(c);
     }
 }
