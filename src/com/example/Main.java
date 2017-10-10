@@ -43,13 +43,25 @@ public class Main
     private static void playHand() throws InterruptedException
     {
 	reset();
-	do
+	System.out.println("You have $" + money + ".");
+	System.out.println("How much do you bet? (whole dollar amounts only)");
+	
+	while (!scan.hasNextInt())
+	{
+	    scan.next();
+	    System.out.println("I can only read numbers!");
+	}
+	
+	p.bet = scan.nextInt();
+	scan.nextLine();
+	
+/* 	do
 	{
 	    System.out.println("You have $" + money + ".");
 	    System.out.println("How much do you bet? (whole dollar amounts only)");
 	    input = scan.nextLine();
 
-	    try
+	/*    try
 	    {
 		if (input.contains("."))
 		{
@@ -74,6 +86,7 @@ public class Main
 
 	} while (p.bet <= 0);
 
+*/
 	if (p.bet > money)
 	{
 	    System.out.println("That bet is too large! Betting max amount instead.");
@@ -162,6 +175,7 @@ public class Main
 		    input = scan.nextLine();
 		}
 	    }
+	    
 	    System.out.println();
 
 	    if (input.substring(0, 1).equalsIgnoreCase("d"))
