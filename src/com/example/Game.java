@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 public class Game
 {
     Deck d = new Deck();
-    Player p = new Player();
+    Player p;
     Player split = new Player();
     Player ai = new Player();
     String input = "";
@@ -17,7 +17,11 @@ public class Game
     // ---------------------------------------------------------------
     public Game() throws InterruptedException
     {
-	p.money = 500;
+	System.out.println("How much money do you start with?");
+	p = new Player(scan.nextInt());
+	scan.nextLine();
+	System.out.println();
+	
 	do
 	{
 	    playHand();
@@ -252,8 +256,7 @@ public class Game
 	}
 
 	// AI's turn
-	// The AI is actually SUPER complex in its decision making (note: this is
-	// sarcasm)
+	// The AI is actually SUPER complex in its decision making
 	// The AI will hit as long as its hand's value is 17 or lower, or if it's too
 	// low to beat the player.
 	// The AI can not split.

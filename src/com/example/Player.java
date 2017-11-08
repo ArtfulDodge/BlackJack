@@ -6,16 +6,25 @@ public class Player
 {
     private ArrayList<Card> hand = new ArrayList<Card>();
     public int bet = 0;
-    public int money = 0;
+    public int money;
 
     // ---------------------------------------------------------------
     // Default constructor
     // ---------------------------------------------------------------
     public Player()
     {
-
+	money = Integer.MAX_VALUE;
     }
 
+    // ---------------------------------------------------------------
+    // Overloaded constructor
+    // Allows you to set the amount of money the player starts with
+    // ---------------------------------------------------------------
+    public Player(int m)
+    {
+	money = m;
+    }
+    
     // ---------------------------------------------------------------
     // Adds the top card of the deck to the Player's hand
     // ---------------------------------------------------------------
