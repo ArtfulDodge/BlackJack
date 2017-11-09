@@ -5,22 +5,22 @@ import java.util.*;
 public class Player
 {
     private ArrayList<Card> hand = new ArrayList<Card>();
-    public int bet = 0;
-    public int money;
+    public long bet = 0;
+    public long money;
 
     // ---------------------------------------------------------------
-    // Default constructor
+    // Default constructor; Assumes the max amount of money
     // ---------------------------------------------------------------
     public Player()
     {
-	money = Integer.MAX_VALUE;
+	money = Long.MAX_VALUE;
     }
 
     // ---------------------------------------------------------------
     // Overloaded constructor
     // Allows you to set the amount of money the player starts with
     // ---------------------------------------------------------------
-    public Player(int m)
+    public Player(long m)
     {
 	money = m;
     }

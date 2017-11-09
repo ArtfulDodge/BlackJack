@@ -18,10 +18,10 @@ public class Game
     public Game() throws InterruptedException
     {
 	System.out.println("How much money do you start with?");
-	p = new Player(scan.nextInt());
+	p = new Player(scan.nextLong());
 	scan.nextLine();
 	System.out.println();
-	
+
 	do
 	{
 	    playHand();
@@ -40,7 +40,6 @@ public class Game
 
 	System.out.println("Thanks for playing!");
 	System.out.println("You finished with $" + p.money + "!");
-	scan.close();
     }
 
     // ---------------------------------------------------------------
@@ -53,17 +52,17 @@ public class Game
 	do
 	{
 	    System.out.println("You have $" + p.money + ".");
-	    System.out.println("How much do you bet? (whole dollar amounts only)");
+	    System.out.println("How much do you bet?");
 	    input = scan.nextLine();
 
 	    try
 	    {
 		if (input.contains("."))
 		{
-		    p.bet = Integer.parseInt(input.substring(0, input.indexOf(".")).replaceAll("[\\D]", ""));
+		    p.bet = Long.parseLong(input.substring(0, input.indexOf(".")).replaceAll("[\\D]", ""));
 		} else
 		{
-		    p.bet = Integer.parseInt(input.replaceAll("[\\D]", ""));
+		    p.bet = Long.parseLong(input.replaceAll("[\\D]", ""));
 		}
 
 		if (p.bet <= 0)
@@ -102,11 +101,13 @@ public class Game
 	if (p.handValue() == 21 && ai.handValue() != 21)
 	{
 	    gameStatus();
-	    System.out.print("You got a blackjack! ");
+	    System.out.print("You got a blackjack!");
 	    pVictory();
 	    return;
 	} else if (p.handValue() == 21 && ai.handValue() == 21)
 	{
+	    gameStatus();
+	    System.out.println("You both got blackjacks!");
 	    draw();
 	    return;
 	}
@@ -133,16 +134,7 @@ public class Game
 			p.removeCard();
 			p.hit(d);
 			split.hit(d);
-			if (p.money > p.bet * 2)
-			{
-			    split.bet = p.bet;
-			    p.money -= split.bet;
-			} else
-			{
-			    System.out.println("Not enough p.money to double bet, betting max amount instead.");
-			    split.bet = p.money;
-			    p.money = 0;
-			}
+			doubleBet(p);
 			potStatus();
 		    }
 		} else
@@ -387,52 +379,49 @@ public class Game
     // gameStatus() exists for readability reasons.
     // Imagine if everywhere you saw gameStatus() now you instead saw what was
     // inside gameStatus(). It's awful, isn't it?
+    // TODO: clean this up a bit
     private void gameStatus()
     {
 	int acedShowing = ai.handValue() - ai.cardInPos(0).getBlackjackValue(ai);
 
 	if (split.cardsInHand() > 0)
 	{
+	    System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
+	    System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
+	    
 	    if (ai.handValue() > 21)
 	    {
-		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
-		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
 		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
 	    } else if (ai.showingValue() >= 21)
 	    {
-		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
-		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
+		
 	    } else if (ai.showingValue() > acedShowing)
 	    {
-		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
-		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
 			+ ai.showingValue());
 	    } else
 	    {
-		System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
-		System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
 	    }
 	} else
 	{
+	    System.out.println("Your hand: " + p + ". Value: " + p.handValue());
+	    
 	    if (ai.handValue() > 21)
 	    {
-		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
+		
 	    } else if (ai.showingValue() >= 21)
 	    {
-		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
+		
 	    } else if (ai.showingValue() > acedShowing)
 	    {
-		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
 			+ ai.showingValue());
 	    } else
 	    {
-		System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
 	    }
 	}
@@ -443,14 +432,14 @@ public class Game
     // ---------------------------------------------------------------
     private void doubleBet(Player play)
     {
-	if (play.bet > p.money)
+	if (play.bet > play.money)
 	{
-	    System.out.println("Not enough p.money to double bet! Betting max amount insted!");
-	    play.bet += p.money;
+	    System.out.println("Not enough money to double bet! Betting max amount insted!");
+	    play.bet += play.money;
 	    p.money = 0;
 	} else
 	{
-	    p.money -= play.bet;
+	    play.money -= play.bet;
 	    play.bet *= 2;
 	}
     }
