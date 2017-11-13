@@ -8,6 +8,7 @@ public class Main
     {
 	Scanner scan = new Scanner(System.in);
 	String input = "";
+	@SuppressWarnings("unused")
 	Game g;
 	do
 	{

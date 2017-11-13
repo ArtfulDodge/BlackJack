@@ -1,7 +1,6 @@
 package com.example;
 
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Game
 {
@@ -33,7 +32,7 @@ public class Game
 	    } else
 	    {
 		input = "n";
-		TimeUnit.SECONDS.sleep(2);
+		Thread.sleep(2000);
 		System.out.println();
 	    }
 	} while (input.substring(0, 1).equalsIgnoreCase("y"));
@@ -52,7 +51,7 @@ public class Game
 	do
 	{
 	    System.out.println("You have $" + p.money + ".");
-	    System.out.println("How much do you bet?");
+	    System.out.println("How much do you bet? (Whole dollar amounts only)");
 	    input = scan.nextLine();
 
 	    try
@@ -69,7 +68,7 @@ public class Game
 		{
 		    System.out.println("That bet is too small! Minimum bet is $1.");
 		    System.out.println();
-		    TimeUnit.SECONDS.sleep(2);
+		    Thread.sleep(2500);
 		}
 
 	    } catch (NumberFormatException e)
@@ -83,7 +82,7 @@ public class Game
 	if (p.bet > p.money)
 	{
 	    System.out.println("That bet is too large! Betting max amount instead.");
-	    TimeUnit.SECONDS.sleep(2);
+	    Thread.sleep(2500);
 	    p.bet = p.money;
 	}
 
@@ -101,7 +100,7 @@ public class Game
 	if (p.handValue() == 21 && ai.handValue() != 21)
 	{
 	    gameStatus();
-	    System.out.print("You got a blackjack!");
+	    System.out.print("You got a blackjack! ");
 	    pVictory();
 	    return;
 	} else if (p.handValue() == 21 && ai.handValue() == 21)
@@ -117,9 +116,8 @@ public class Game
 	{
 	    gameStatus();
 
-	    // Can the player split? If so, give them the option to. Otherwise
-	    // play as
-	    // normal.
+	    // Can the player split? If so, give them the option to. 
+	    // Otherwise play as normal.
 	    if (p.cardsInHand() == 2)
 	    {
 		if (p.cardInPos(0).getBlackjackValue(p) == p.cardInPos(1).getBlackjackValue(p)
@@ -190,7 +188,7 @@ public class Game
 		    gameStatus();
 		    System.out.println("Your first hand busted!");
 		    System.out.println();
-		    TimeUnit.SECONDS.sleep(2);
+		    Thread.sleep(2500);
 		}
 	    }
 	    // Detects what their input starts with instead of the whole word as a
@@ -241,7 +239,7 @@ public class Game
 		    }
 
 		    System.out.println("Your second hand busted!");
-		    TimeUnit.SECONDS.sleep(2);
+		    Thread.sleep(2500);
 		}
 	    } while ((input.substring(0, 1).equalsIgnoreCase("h") || input.substring(0, 1).equalsIgnoreCase("sp"))
 		    && split.handValue() < 21);
@@ -257,7 +255,7 @@ public class Game
 	{
 	    gameStatus();
 
-	    TimeUnit.SECONDS.sleep(2);
+	    Thread.sleep(2500);
 
 	    System.out.println();
 
@@ -276,12 +274,11 @@ public class Game
 	{
 	    System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
 	    System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
-	    System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
 	} else
 	{
 	    System.out.println("Your hand: " + p + ". Value: " + p.handValue());
-	    System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
 	}
+	System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
 
 	// Checking to see who wins.
 	// Defaults to AI winning if the player doesn't win and it's not a draw.
@@ -365,7 +362,7 @@ public class Game
 	System.out.println();
 	System.out.println("The pot is now $" + (p.bet + split.bet + ai.bet));
 
-	TimeUnit.SECONDS.sleep(1);
+	Thread.sleep(1250);
 
 	ai.bet = p.bet + split.bet;
 	System.out.println();
@@ -388,14 +385,14 @@ public class Game
 	{
 	    System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
 	    System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
-	    
+
 	    if (ai.handValue() > 21)
 	    {
 		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
 	    } else if (ai.showingValue() >= 21)
 	    {
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
-		
+
 	    } else if (ai.showingValue() > acedShowing)
 	    {
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
@@ -407,15 +404,15 @@ public class Game
 	} else
 	{
 	    System.out.println("Your hand: " + p + ". Value: " + p.handValue());
-	    
+
 	    if (ai.handValue() > 21)
 	    {
 		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
-		
+
 	    } else if (ai.showingValue() >= 21)
 	    {
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
-		
+
 	    } else if (ai.showingValue() > acedShowing)
 	    {
 		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
