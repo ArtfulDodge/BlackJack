@@ -10,6 +10,7 @@ public class Main
 	String input = "";
 	@SuppressWarnings("unused")
 	Game g;
+	
 	do
 	{
 	    g = new Game();

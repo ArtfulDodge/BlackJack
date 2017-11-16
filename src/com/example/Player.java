@@ -4,21 +4,13 @@ import java.util.*;
 
 public class Player
 {
-    private ArrayList<Card> hand = new ArrayList<Card>();
+    protected ArrayList<Card> hand = new ArrayList<Card>();
     public long bet = 0;
     public long money;
 
     // ---------------------------------------------------------------
-    // Default constructor; Assumes the max amount of money
-    // ---------------------------------------------------------------
-    public Player()
-    {
-	money = Long.MAX_VALUE;
-    }
-
-    // ---------------------------------------------------------------
-    // Overloaded constructor
-    // Allows you to set the amount of money the player starts with
+    // Constructor
+    // Requires you to set the amount of money the player starts with
     // ---------------------------------------------------------------
     public Player(long m)
     {
@@ -67,41 +59,6 @@ public class Player
     }
 
     // ---------------------------------------------------------------
-    // Returns the value of the Player's hand, minus the first
-    // Card
-    // ---------------------------------------------------------------
-    public int showingValue()
-    {
-	int value = 0;
-	int aces = 0;
-	for (Card i : hand)
-	{
-	    if (hand.indexOf(i) == 0)
-	    {
-		value += 0;
-	    } else if (i.getValue() == 1)
-	    {
-		aces++;
-		value += 11;
-	    } else if (i.getValue() > 10)
-	    {
-		value += 10;
-	    } else
-	    {
-		value += i.getValue();
-	    }
-
-	    while (value > 21 && aces > 0)
-	    {
-		value -= 10;
-		aces -= 1;
-	    }
-	}
-
-	return value;
-    }
-
-    // ---------------------------------------------------------------
     // Returns all the Cards in a Player's hand
     // ---------------------------------------------------------------
     public String toString()
@@ -112,26 +69,6 @@ public class Player
 	    if (i == 0)
 	    {
 		result += hand.get(i);
-	    } else
-	    {
-		result += ", " + hand.get(i);
-	    }
-	}
-
-	return result;
-    }
-
-    // ---------------------------------------------------------------
-    // Returns all the Cards in the Player's hand, minus the first
-    // ---------------------------------------------------------------
-    public String showing()
-    {
-	String result = "";
-	for (int i = 0; i < hand.size(); i++)
-	{
-	    if (i == 0)
-	    {
-		result += "an unknown card";
 	    } else
 	    {
 		result += ", " + hand.get(i);

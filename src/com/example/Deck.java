@@ -69,13 +69,12 @@ public class Deck
     // ---------------------------------------------------------------
     public Card draw()
     {
-	deckIndex++;
 	if (deckIndex > 52)
 	{
 	    Shuffle();
 	    return draw();
 	}
-	return deck[deckIndex - 1];
+	return deck[deckIndex++];
     }
 
     // ---------------------------------------------------------------

@@ -6,21 +6,33 @@ public class Game
 {
     Deck d = new Deck();
     Player p;
-    Player split = new Player();
-    Player ai = new Player();
+    Player split = new Player(Long.MAX_VALUE);
+    Dealer ai = new Dealer();
     String input = "";
     Scanner scan = new Scanner(System.in);
 
     // ---------------------------------------------------------------
     // Constructor
+    // Starts the game and plays until the user runs out of money.
     // ---------------------------------------------------------------
     public Game() throws InterruptedException
     {
-	System.out.println("How much money do you start with?");
-	p = new Player(scan.nextLong());
-	scan.nextLine();
-	System.out.println();
+	long startingAmt = 0;
+	do
+	{
+	    System.out.println("How much money do you start with?");
+	    startingAmt = getNumericInput();
+	    
+	    if (startingAmt <= 0)
+	    {
+		System.out.println("That number is too small! Minimum is $1.");
+		Thread.sleep(2500);
+	    }
+	    
+	} while (startingAmt == 0);
 
+	p = new Player(startingAmt);
+	
 	do
 	{
 	    playHand();
@@ -52,36 +64,20 @@ public class Game
 	{
 	    System.out.println("You have $" + p.money + ".");
 	    System.out.println("How much do you bet? (Whole dollar amounts only)");
-	    input = scan.nextLine();
-
-	    try
+	    p.bet = getNumericInput();
+	    
+	    if (p.bet <= 0)
 	    {
-		if (input.contains("."))
-		{
-		    p.bet = Long.parseLong(input.substring(0, input.indexOf(".")).replaceAll("[\\D]", ""));
-		} else
-		{
-		    p.bet = Long.parseLong(input.replaceAll("[\\D]", ""));
-		}
-
-		if (p.bet <= 0)
-		{
-		    System.out.println("That bet is too small! Minimum bet is $1.");
-		    System.out.println();
-		    Thread.sleep(2500);
-		}
-
-	    } catch (NumberFormatException e)
-	    {
-		System.out.println("I can only read numbers! Please try again.");
-		System.out.println();
+		System.out.println("That bet is too small! Minimum bet is $1.");
+		Thread.sleep(2500);
 	    }
-
+	    
 	} while (p.bet <= 0);
 
 	if (p.bet > p.money)
 	{
 	    System.out.println("That bet is too large! Betting max amount instead.");
+	    System.out.println();
 	    Thread.sleep(2500);
 	    p.bet = p.money;
 	}
@@ -111,69 +107,43 @@ public class Game
 	    return;
 	}
 
-	// Loop that allows the player to actually play the game
+	// Loop that allows the player to actually play the game.
+	// Plays the player's first hand.
 	do
 	{
 	    gameStatus();
 
-	    // Can the player split? If so, give them the option to. 
+	    // Can the player split? If so, give them the option to.
 	    // Otherwise play as normal.
 	    if (p.cardsInHand() == 2)
 	    {
 		if (p.cardInPos(0).getBlackjackValue(p) == p.cardInPos(1).getBlackjackValue(p)
 			&& split.cardsInHand() == 0)
 		{
-		    System.out.println("Hit, Stand, double down, or Split? (Note: Splitting will double your bet)");
-		    input = scan.nextLine();
+		    System.out.print("Hit, Stand, double down, or Split? (Note: Splitting will double your bet)");
 
-		    if (input.substring(0, 2).equalsIgnoreCase("sp"))
-		    {
-			split.addCard(p.cardInPos(1));
-			p.removeCard();
-			p.hit(d);
-			split.hit(d);
-			doubleBet(p);
-			potStatus();
-		    }
 		} else
 		{
-		    if (split.cardsInHand() > 0)
-		    {
-			System.out.println("Hit, Stand, or Double down? (First hand)");
-			input = scan.nextLine();
-		    } else
-		    {
-			System.out.println("Hit, Stand, or Double down?");
-			input = scan.nextLine();
-		    }
+		    System.out.print("Hit, Stand, or Double down?");
 		}
 	    } else
 	    {
-		if (split.cardsInHand() > 0)
-		{
-		    System.out.println("Hit or Stand? (First hand)");
-		    input = scan.nextLine();
-		} else
-		{
-		    System.out.println("Hit or Stand?");
-		    input = scan.nextLine();
-		}
+		System.out.print("Hit or Stand?");
 	    }
+
+	    if (split.cardsInHand() > 0)
+	    {
+		System.out.println("(First hand)");
+	    } else
+	    {
+		System.out.println();
+	    }
+
+	    input = scan.nextLine();
 
 	    System.out.println();
 
-	    if (input.substring(0, 1).equalsIgnoreCase("d"))
-	    {
-		input = "stand";
-		doubleBet(p);
-		potStatus();
-		p.hit(d);
-	    }
-
-	    if (input.substring(0, 1).equalsIgnoreCase("h"))
-	    {
-		p.hit(d);
-	    }
+	    doAction(input, p);
 
 	    if (p.handValue() > 21)
 	    {
@@ -196,7 +166,8 @@ public class Game
 	} while ((input.substring(0, 1).equalsIgnoreCase("h") || input.substring(0, 2).equalsIgnoreCase("sp"))
 		&& p.handValue() < 21);
 
-	// Plays the second hand if the player decided to split
+	// Plays the second hand if the player decided to split. Does the same thing
+	// as the first loop, minus giving the option to split.
 	if (split.cardsInHand() > 0)
 	{
 	    do
@@ -215,18 +186,7 @@ public class Game
 
 		System.out.println();
 
-		if (input.substring(0, 1).equalsIgnoreCase("d") && split.cardsInHand() == 2)
-		{
-		    input = "stand";
-		    doubleBet(split);
-		    potStatus();
-		    split.hit(d);
-		}
-
-		if (input.substring(0, 1).equalsIgnoreCase("h"))
-		{
-		    split.hit(d);
-		}
+		doAction(input, split);
 
 		if (split.handValue() > 21)
 		{
@@ -264,7 +224,7 @@ public class Game
 	    if (ai.handValue() > 21)
 	    {
 		gameStatus();
-		System.out.println("Your opponent busted!");
+		System.out.println("The Dealer busted!");
 		pVictory();
 		return;
 	    }
@@ -278,7 +238,7 @@ public class Game
 	{
 	    System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 	}
-	System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
+	System.out.println("The Dealer's hand: " + ai.toString(true) + ". Value: " + ai.handValue());
 
 	// Checking to see who wins.
 	// Defaults to AI winning if the player doesn't win and it's not a draw.
@@ -294,7 +254,7 @@ public class Game
 	{
 	    if (ai.handValue() == 21 && ai.cardsInHand() == 2)
 	    {
-		System.out.print("Your opponent had a blackjack! ");
+		System.out.print("The Dealer had a blackjack! ");
 		aiVictory();
 		return;
 	    }
@@ -320,17 +280,18 @@ public class Game
 	p.clearHand();
 	split.clearHand();
 	ai.clearHand();
-    }
-
-    // aiVictory(), pVictory(), and draw() just print out the
-    // proper things for each scenario and do the necessary
-    // behind the scenes things.
-    private void aiVictory()
-    {
-	System.out.println("Your opponent wins the pot!");
 	p.bet = 0;
 	split.bet = 0;
 	ai.bet = 0;
+    }
+
+    // ---------------------------------------------------------------
+    // aiVictory(), pVictory(), and draw() just print out the
+    // proper things for each scenario
+    // ---------------------------------------------------------------
+    private void aiVictory()
+    {
+	System.out.println("The Dealer wins the pot!");
 	return;
     }
 
@@ -338,9 +299,6 @@ public class Game
     {
 	System.out.println("You win the pot!");
 	p.money += ai.bet + p.bet + split.bet;
-	p.bet = 0;
-	split.bet = 0;
-	ai.bet = 0;
 	return;
     }
 
@@ -348,9 +306,6 @@ public class Game
     {
 	System.out.println("It's a draw!");
 	p.money += p.bet + split.bet;
-	p.bet = 0;
-	split.bet = 0;
-	ai.bet = 0;
 	return;
     }
 
@@ -359,7 +314,6 @@ public class Game
     // ---------------------------------------------------------------
     private void potStatus() throws InterruptedException
     {
-	System.out.println();
 	System.out.println("The pot is now $" + (p.bet + split.bet + ai.bet));
 
 	Thread.sleep(1250);
@@ -367,61 +321,28 @@ public class Game
 	ai.bet = p.bet + split.bet;
 	System.out.println();
 
-	System.out.println("The AI matched your bet!");
+	System.out.println("The Dealer matched your bet!");
 	System.out.println("The pot is now $" + (p.bet + split.bet + ai.bet));
 
 	System.out.println();
     }
 
-    // gameStatus() exists for readability reasons.
-    // Imagine if everywhere you saw gameStatus() now you instead saw what was
-    // inside gameStatus(). It's awful, isn't it?
-    // TODO: clean this up a bit
+    // ---------------------------------------------------------------
+    // Returns the cards in each Player's hands and the values of
+    // those hands as they are known to the user.
+    // ---------------------------------------------------------------
     private void gameStatus()
     {
-	int acedShowing = ai.handValue() - ai.cardInPos(0).getBlackjackValue(ai);
-
 	if (split.cardsInHand() > 0)
 	{
 	    System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
 	    System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
-
-	    if (ai.handValue() > 21)
-	    {
-		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
-	    } else if (ai.showingValue() >= 21)
-	    {
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
-
-	    } else if (ai.showingValue() > acedShowing)
-	    {
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
-			+ ai.showingValue());
-	    } else
-	    {
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
-	    }
 	} else
 	{
 	    System.out.println("Your hand: " + p + ". Value: " + p.handValue());
-
-	    if (ai.handValue() > 21)
-	    {
-		System.out.println("Your opponent's hand: " + ai + ". Value: " + ai.handValue());
-
-	    } else if (ai.showingValue() >= 21)
-	    {
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing);
-
-	    } else if (ai.showingValue() > acedShowing)
-	    {
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + acedShowing + " or "
-			+ ai.showingValue());
-	    } else
-	    {
-		System.out.println("Your opponent's hand: " + ai.showing() + ". Showing: " + ai.showingValue());
-	    }
 	}
+
+	System.out.println("The Dealer's hand: " + ai + ". Known value: " + ai.valueToString());
     }
 
     // ---------------------------------------------------------------
@@ -431,7 +352,6 @@ public class Game
     {
 	if (play.bet > play.money)
 	{
-	    System.out.println("Not enough money to double bet! Betting max amount insted!");
 	    play.bet += play.money;
 	    p.money = 0;
 	} else
@@ -439,5 +359,68 @@ public class Game
 	    play.money -= play.bet;
 	    play.bet *= 2;
 	}
+    }
+
+    // ---------------------------------------------------------------
+    // Reads the user's input and does the desired action
+    // ---------------------------------------------------------------
+    private void doAction(String i, Player pl) throws InterruptedException
+    {
+	if (i.substring(0, 1).equalsIgnoreCase("d") && pl.cardsInHand() == 2)
+	{
+	    i = "stand";
+	    doubleBet(p);
+	    potStatus();
+	    p.hit(d);
+	}
+
+	if (i.substring(0, 1).equalsIgnoreCase("h"))
+	{
+	    p.hit(d);
+	}
+
+	if (input.substring(0, 2).equalsIgnoreCase("sp")
+		&& (p.cardInPos(0).getBlackjackValue(p) == p.cardInPos(1).getBlackjackValue(p)
+			&& split.cardsInHand() == 0))
+	{
+	    split.addCard(p.cardInPos(1));
+	    p.removeCard();
+	    p.hit(d);
+	    split.hit(d);
+	    doubleBet(p);
+	    potStatus();
+	}
+    }
+
+    // ---------------------------------------------------------------
+    // Gets user input as a long
+    // ---------------------------------------------------------------
+    private long getNumericInput()
+    {
+	long result = 0;
+	boolean isLong = false;
+	do
+	{
+	    input = scan.nextLine();
+	    System.out.println();
+	    try
+	    {
+		if (input.contains("."))
+		{
+		    result = Long.parseLong(input.substring(0, input.indexOf(".")).replaceAll("[\\D]", ""));
+		} else
+		{
+		    result = Long.parseLong(input.replaceAll("[\\D]", ""));
+		}
+		
+		isLong = true;
+	    } catch (NumberFormatException e)
+	    {
+		System.out.println("I can only read numbers! Please try again:");
+		isLong = false;
+	    }
+	} while (!isLong);
+	
+	return result;
     }
 }
