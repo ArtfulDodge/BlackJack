@@ -16,18 +16,7 @@ public class Dealer extends Player
     {
 	if (handValue() <= 21)
 	{
-	    String result = "";
-	    for (int i = 0; i < hand.size(); i++)
-	    {
-		if (i == 0)
-		{
-		    result += "an unknown card";
-		} else
-		{
-		    result += ", " + hand.get(i);
-		}
-	    }
-	    return result;
+	    return showing();
 	} else
 	{
 	    return super.toString();
@@ -52,7 +41,7 @@ public class Dealer extends Player
     // ---------------------------------------------------------------
     // Returns all the Cards in the Dealer's hand, minus the first
     // ---------------------------------------------------------------
-    public String showing()
+    private String showing()
     {
 	String result = "";
 	for (int i = 0; i < hand.size(); i++)
@@ -73,7 +62,7 @@ public class Dealer extends Player
     // Returns the value of the Dealer's hand, minus the first
     // Card
     // ---------------------------------------------------------------
-    public int showingValue()
+    private int showingValue()
     {
 	int value = 0;
 	int aces = 0;

@@ -22,24 +22,24 @@ public class Game
 	{
 	    System.out.println("How much money do you start with?");
 	    startingAmt = getNumericInput();
-	    
+
 	    if (startingAmt <= 0)
 	    {
 		System.out.println("That number is too small! Minimum is $1.");
 		Thread.sleep(2500);
 	    }
-	    
+
 	} while (startingAmt == 0);
 
 	p = new Player(startingAmt);
-	
+
 	do
 	{
 	    playHand();
 	    if (p.money > 0)
 	    {
 		System.out.println("Play another hand? (y/n)");
-		input = scan.nextLine();
+		input = getInput();
 		System.out.println();
 	    } else
 	    {
@@ -65,13 +65,13 @@ public class Game
 	    System.out.println("You have $" + p.money + ".");
 	    System.out.println("How much do you bet? (Whole dollar amounts only)");
 	    p.bet = getNumericInput();
-	    
+
 	    if (p.bet <= 0)
 	    {
 		System.out.println("That bet is too small! Minimum bet is $1.");
 		Thread.sleep(2500);
 	    }
-	    
+
 	} while (p.bet <= 0);
 
 	if (p.bet > p.money)
@@ -139,7 +139,7 @@ public class Game
 		System.out.println();
 	    }
 
-	    input = scan.nextLine();
+	    input = getInput();
 
 	    System.out.println();
 
@@ -182,7 +182,7 @@ public class Game
 		    System.out.println("Hit or Stand?");
 		}
 
-		input = scan.nextLine();
+		input = getInput();
 
 		System.out.println();
 
@@ -342,7 +342,14 @@ public class Game
 	    System.out.println("Your hand: " + p + ". Value: " + p.handValue());
 	}
 
-	System.out.println("The Dealer's hand: " + ai + ". Known value: " + ai.valueToString());
+	System.out.print("The Dealer's hand: " + ai + ". ");
+	if (ai.handValue() > 21)
+	{
+	    System.out.println("Value: " + ai.valueToString());
+	} else
+	{
+	    System.out.println("Known value: " + ai.valueToString());
+	}
     }
 
     // ---------------------------------------------------------------
@@ -401,7 +408,7 @@ public class Game
 	boolean isLong = false;
 	do
 	{
-	    input = scan.nextLine();
+	    input = getInput();
 	    System.out.println();
 	    try
 	    {
@@ -412,7 +419,7 @@ public class Game
 		{
 		    result = Long.parseLong(input.replaceAll("[\\D]", ""));
 		}
-		
+
 		isLong = true;
 	    } catch (NumberFormatException e)
 	    {
@@ -420,6 +427,25 @@ public class Game
 		isLong = false;
 	    }
 	} while (!isLong);
+
+	return result;
+    }
+
+    // ---------------------------------------------------------------
+    // Gets user input as a String
+    // ---------------------------------------------------------------
+    private String getInput()
+    {
+	String result = "";
+	do
+	{
+	    result = scan.nextLine();
+	} while (result.equals(""));
+
+	while (result.length() < 3)
+	{
+	    result += " ";
+	}
 	
 	return result;
     }
