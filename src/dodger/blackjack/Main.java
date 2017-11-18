@@ -1,4 +1,4 @@
-package com.example;
+package dodger.blackjack;
 
 import java.util.Scanner;
 

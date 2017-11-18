@@ -1,10 +1,12 @@
-package com.example;
+package dodger.cards;
+
+import dodger.audio.Audio;
 
 public class Deck
 {
     private Card[] deck;
-
     private int deckIndex = 0;
+    private Audio a = new Audio();
 
     // ---------------------------------------------------------------
     // Default constructor; Generates a complete deck of 52 unique
@@ -18,8 +20,7 @@ public class Deck
 	{
 	    for (int j = 1; j < 14; j++)
 	    {
-		deck[index] = new Card(i, j);
-		index++;
+		deck[index++] = new Card(i, j);
 	    }
 
 	}
@@ -69,6 +70,7 @@ public class Deck
     // ---------------------------------------------------------------
     public Card draw()
     {
+	a.Play("draw");
 	if (deckIndex > 52)
 	{
 	    Shuffle();

@@ -1,7 +1,12 @@
-package com.example;
+package dodger.blackjack.players;
+
+import dodger.cards.Card;
 
 public class Dealer extends Player
 {
+    // ---------------------------------------------------------------
+    // Constructor
+    // ---------------------------------------------------------------
     public Dealer()
     {
 	super(Long.MAX_VALUE);
@@ -35,6 +40,23 @@ public class Dealer extends Player
 	} else
 	{
 	    return toString();
+	}
+    }
+    
+    // ---------------------------------------------------------------
+    // Increases the Dealer's bet by the given amount, taking care
+    // to avoid overflow
+    // ---------------------------------------------------------------
+    public void increaseBet(long amount)
+    {
+	if (money < amount)
+	{
+	    bet += money;
+	    money = Long.MAX_VALUE;
+	} else
+	{
+	    bet += amount;
+	    money -= amount;
 	}
     }
     

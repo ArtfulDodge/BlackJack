@@ -1,12 +1,17 @@
-package com.example;
+package dodger.blackjack;
 
 import java.util.Scanner;
+
+import dodger.blackjack.players.Dealer;
+import dodger.blackjack.players.Player;
+import dodger.blackjack.players.Split;
+import dodger.cards.Deck;
 
 public class Game
 {
     Deck d = new Deck();
     Player p;
-    Player split = new Player(Long.MAX_VALUE);
+    Split split = new Split(p);
     Dealer ai = new Dealer();
     String input = "";
     Scanner scan = new Scanner(System.in);
@@ -64,25 +69,15 @@ public class Game
 	{
 	    System.out.println("You have $" + p.money + ".");
 	    System.out.println("How much do you bet? (Whole dollar amounts only)");
-	    p.bet = getNumericInput();
+	    p.increaseBet(getNumericInput());
 
-	    if (p.bet <= 0)
+	    if (p.getBet() <= 0)
 	    {
 		System.out.println("That bet is too small! Minimum bet is $1.");
 		Thread.sleep(2500);
 	    }
 
-	} while (p.bet <= 0);
-
-	if (p.bet > p.money)
-	{
-	    System.out.println("That bet is too large! Betting max amount instead.");
-	    System.out.println();
-	    Thread.sleep(2500);
-	    p.bet = p.money;
-	}
-
-	p.money -= p.bet;
+	} while (p.getBet() <= 0);
 
 	potStatus();
 
@@ -133,7 +128,7 @@ public class Game
 
 	    if (split.cardsInHand() > 0)
 	    {
-		System.out.println("(First hand)");
+		System.out.println(" (First hand)");
 	    } else
 	    {
 		System.out.println();
@@ -208,9 +203,9 @@ public class Game
 	// AI's turn
 	// The AI is actually SUPER complex in its decision making
 	// The AI will hit as long as its hand's value is 17 or lower, or if it's too
-	// low to beat the player.
+	// low to beat and/or tie the player.
 	// The AI can not split.
-	while (((ai.handValue() < p.handValue() || ai.handValue() < split.handValue()) || ai.handValue() <= 17)
+	while (((ai.handValue() < p.handValue() || (ai.handValue() < split.handValue() && !split.isBusted())) || ai.handValue() <= 17)
 		&& ai.handValue() != 21)
 	{
 	    gameStatus();
@@ -280,9 +275,9 @@ public class Game
 	p.clearHand();
 	split.clearHand();
 	ai.clearHand();
-	p.bet = 0;
-	split.bet = 0;
-	ai.bet = 0;
+	p.resetBet();
+	split.resetBet();
+	ai.resetBet();
     }
 
     // ---------------------------------------------------------------
@@ -292,20 +287,21 @@ public class Game
     private void aiVictory()
     {
 	System.out.println("The Dealer wins the pot!");
+	ai.money += pot();
 	return;
     }
 
     private void pVictory()
     {
 	System.out.println("You win the pot!");
-	p.money += ai.bet + p.bet + split.bet;
+	p.money += pot();
 	return;
     }
 
     private void draw()
     {
 	System.out.println("It's a draw!");
-	p.money += p.bet + split.bet;
+	p.money += p.getBet() + split.getBet();
 	return;
     }
 
@@ -314,15 +310,15 @@ public class Game
     // ---------------------------------------------------------------
     private void potStatus() throws InterruptedException
     {
-	System.out.println("The pot is now $" + (p.bet + split.bet + ai.bet));
+	System.out.println("The pot is now $" + pot());
 
 	Thread.sleep(1250);
 
-	ai.bet = p.bet + split.bet;
+	ai.increaseBet(p.getBet() + split.getBet() - ai.getBet());
 	System.out.println();
 
 	System.out.println("The Dealer matched your bet!");
-	System.out.println("The pot is now $" + (p.bet + split.bet + ai.bet));
+	System.out.println("The pot is now $" + pot());
 
 	System.out.println();
     }
@@ -353,22 +349,6 @@ public class Game
     }
 
     // ---------------------------------------------------------------
-    // Doubles the player's bet
-    // ---------------------------------------------------------------
-    private void doubleBet(Player play)
-    {
-	if (play.bet > play.money)
-	{
-	    play.bet += play.money;
-	    p.money = 0;
-	} else
-	{
-	    play.money -= play.bet;
-	    play.bet *= 2;
-	}
-    }
-
-    // ---------------------------------------------------------------
     // Reads the user's input and does the desired action
     // ---------------------------------------------------------------
     private void doAction(String i, Player pl) throws InterruptedException
@@ -376,25 +356,25 @@ public class Game
 	if (i.substring(0, 1).equalsIgnoreCase("d") && pl.cardsInHand() == 2)
 	{
 	    i = "stand";
-	    doubleBet(p);
+	    pl.doubleBet();
 	    potStatus();
-	    p.hit(d);
+	    pl.hit(d);
 	}
 
 	if (i.substring(0, 1).equalsIgnoreCase("h"))
 	{
-	    p.hit(d);
+	    pl.hit(d);
 	}
 
 	if (input.substring(0, 2).equalsIgnoreCase("sp")
-		&& (p.cardInPos(0).getBlackjackValue(p) == p.cardInPos(1).getBlackjackValue(p)
+		&& (p.cardInPos(0).getBlackjackValue(pl) == pl.cardInPos(1).getBlackjackValue(pl)
 			&& split.cardsInHand() == 0))
 	{
 	    split.addCard(p.cardInPos(1));
-	    p.removeCard();
-	    p.hit(d);
+	    pl.removeCard();
+	    pl.hit(d);
 	    split.hit(d);
-	    doubleBet(p);
+	    pl.doubleBet();
 	    potStatus();
 	}
     }
@@ -448,5 +428,13 @@ public class Game
 	}
 	
 	return result;
+    }
+    
+    // ---------------------------------------------------------------
+    // Returns the current pot
+    // ---------------------------------------------------------------
+    private long pot()
+    {
+	return ai.getBet() + p.getBet() + split.getBet();
     }
 }

@@ -1,11 +1,14 @@
-package com.example;
+package dodger.blackjack.players;
 
 import java.util.*;
+
+import dodger.cards.Card;
+import dodger.cards.Deck;
 
 public class Player
 {
     protected ArrayList<Card> hand = new ArrayList<Card>();
-    public long bet = 0;
+    protected long bet = 0;
     public long money;
 
     // ---------------------------------------------------------------
@@ -78,6 +81,47 @@ public class Player
 	return result;
     }
 
+    // ---------------------------------------------------------------
+    // Increases the Player's bet by the given amount
+    // ---------------------------------------------------------------
+    public void increaseBet(long amount)
+    {
+	if (money < amount)
+	{
+	    System.out.println("That bet is too large! Betting max amount instead.");
+	    bet += money;
+	    money = 0;
+	} else
+	{
+	    bet += amount;
+	    money -= amount;
+	}
+    }
+    
+    // ---------------------------------------------------------------
+    // Doubles the Player's bet
+    // ---------------------------------------------------------------
+    public void doubleBet()
+    {
+	increaseBet(bet);
+    }
+    
+    // ---------------------------------------------------------------
+    // Resets the Player's bet to 0
+    // ---------------------------------------------------------------
+    public void resetBet()
+    {
+	bet = 0;
+    }
+    
+    // ---------------------------------------------------------------
+    // Returns the value of bet
+    // ---------------------------------------------------------------
+    public long getBet()
+    {
+	return bet;
+    }
+    
     // ---------------------------------------------------------------
     // Returns the card at the desired index in hand
     // ---------------------------------------------------------------

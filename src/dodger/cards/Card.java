@@ -1,4 +1,6 @@
-package com.example;
+package dodger.cards;
+
+import dodger.blackjack.players.Player;
 
 public class Card
 {
@@ -90,6 +92,19 @@ public class Card
     // ---------------------------------------------------------------
     public int getValue()
     {
+	return value;
+    }
+    
+    // ---------------------------------------------------------------
+    // Returns the value of the Card as it would be in most games as
+    // an integer.
+    // ---------------------------------------------------------------
+    public int getGameValue()
+    {
+	if (value == 1)
+	{
+	    return 11;
+	}
 	return value;
     }
 
