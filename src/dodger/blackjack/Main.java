@@ -19,6 +19,7 @@ public class Main
 	    System.out.println();
 
 	} while (input.substring(0, 1).equalsIgnoreCase("y"));
+	
 	scan.close();
     }
 }

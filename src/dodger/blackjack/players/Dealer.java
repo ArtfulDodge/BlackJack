@@ -49,10 +49,10 @@ public class Dealer extends Player
     // ---------------------------------------------------------------
     public void increaseBet(long amount)
     {
-	if (money < amount)
+	if (money < amount || money + amount < 0)
 	{
-	    bet += money;
 	    money = Long.MAX_VALUE;
+	    bet+=amount;
 	} else
 	{
 	    bet += amount;
