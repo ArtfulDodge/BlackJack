@@ -11,7 +11,7 @@ public class Game
 {
     Deck d = new Deck();
     Player p;
-    Split split = new Split(p);
+    Split split;
     Dealer ai = new Dealer();
     String input = "";
     Scanner scan = new Scanner(System.in);
@@ -30,13 +30,14 @@ public class Game
 
 	    if (startingAmt <= 0)
 	    {
-		System.out.println("That number is too small! Minimum is $1.");
+		System.err.println("That number is too small! Minimum is $1.");
 		Thread.sleep(2500);
 	    }
 
 	} while (startingAmt == 0);
 
 	p = new Player(startingAmt);
+	split = new Split(p);
 
 	do
 	{
@@ -73,7 +74,7 @@ public class Game
 
 	    if (p.getBet() <= 0)
 	    {
-		System.out.println("That bet is too small! Minimum bet is $1.");
+		System.err.println("That bet is too small! Minimum bet is $1.");
 		Thread.sleep(2500);
 	    }
 
@@ -200,11 +201,11 @@ public class Game
 		    && split.handValue() < 21);
 	}
 
-	// AI's turn
-	// The AI is actually SUPER complex in its decision making
-	// The AI will hit as long as its hand's value is 17 or lower, or if it's too
+	// Dealer's turn
+	// The Dealer is actually SUPER complex in its decision making
+	// The Dealer will hit as long as its hand's value is 17 or lower, or if it's too
 	// low to beat and/or tie the player.
-	// The AI can not split.
+	// The Dealer can not split.
 	while (((ai.handValue() < p.handValue() || (ai.handValue() < split.handValue() && !split.isBusted())) || ai.handValue() <= 17)
 		&& ai.handValue() != 21)
 	{
@@ -236,8 +237,8 @@ public class Game
 	System.out.println("The Dealer's hand: " + ai.toString(true) + ". Value: " + ai.handValue());
 
 	// Checking to see who wins.
-	// Defaults to AI winning if the player doesn't win and it's not a draw.
-	// (In other words any wonky bullshit defaults to an AI victory)
+	// Defaults to Dealer winning if the player doesn't win and it's not a draw.
+	// (In other words any wonky bullshit defaults to an Dealer victory)
 	if ((p.handValue() > ai.handValue() && p.handValue() <= 21)
 		|| (split.handValue() > ai.handValue() && split.handValue() < 21))
 	{
@@ -403,7 +404,7 @@ public class Game
 		isLong = true;
 	    } catch (NumberFormatException e)
 	    {
-		System.out.println("I can only read numbers! Please try again:");
+		System.err.println("I can only read numbers! Please try again:");
 		isLong = false;
 	    }
 	} while (!isLong);
