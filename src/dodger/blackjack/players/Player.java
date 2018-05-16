@@ -17,15 +17,15 @@ public class Player
     // ---------------------------------------------------------------
     public Player(long m)
     {
-	money = m;
+        money = m;
     }
-    
+
     // ---------------------------------------------------------------
     // Adds the top card of the deck to the Player's hand
     // ---------------------------------------------------------------
     public void hit(Deck d)
     {
-	hand.add(d.draw());
+        hand.add(d.draw());
     }
 
     // ---------------------------------------------------------------
@@ -33,32 +33,33 @@ public class Player
     // blackjack. Changes the values of aces from 11 to 1
     // automatically to avoid busting.
     // ---------------------------------------------------------------
+    @SuppressWarnings("Duplicates")
     public int handValue()
     {
-	int value = 0;
-	int aces = 0;
-	for (Card i : hand)
-	{
-	    if (i.getValue() == 1)
-	    {
-		aces++;
-		value += 11;
-	    } else if (i.getValue() > 10)
-	    {
-		value += 10;
-	    } else
-	    {
-		value += i.getValue();
-	    }
+        int value = 0;
+        int aces = 0;
+        for (Card i : hand)
+        {
+            if (i.getValue() == 1)
+            {
+                aces++;
+                value += 11;
+            } else if (i.getValue() > 10)
+            {
+                value += 10;
+            } else
+            {
+                value += i.getValue();
+            }
 
-	    while (value > 21 && aces > 0)
-	    {
-		value -= 10;
-		aces -= 1;
-	    }
-	}
+            while (value > 21 && aces > 0)
+            {
+                value -= 10;
+                aces -= 1;
+            }
+        }
 
-	return value;
+        return value;
     }
 
     // ---------------------------------------------------------------
@@ -66,19 +67,19 @@ public class Player
     // ---------------------------------------------------------------
     public String toString()
     {
-	String result = "";
-	for (int i = 0; i < hand.size(); i++)
-	{
-	    if (i == 0)
-	    {
-		result += hand.get(i);
-	    } else
-	    {
-		result += ", " + hand.get(i);
-	    }
-	}
+        String result = "";
+        for (int i = 0; i < hand.size(); i++)
+        {
+            if (i == 0)
+            {
+                result += hand.get(i);
+            } else
+            {
+                result += ", " + hand.get(i);
+            }
+        }
 
-	return result;
+        return result;
     }
 
     // ---------------------------------------------------------------
@@ -86,48 +87,48 @@ public class Player
     // ---------------------------------------------------------------
     public void increaseBet(long amount)
     {
-	if (money < amount)
-	{
-	    System.out.println("That bet is too large! Betting max amount instead.");
-	    bet += money;
-	    money = 0;
-	} else
-	{
-	    bet += amount;
-	    money -= amount;
-	}
+        if (money < amount)
+        {
+            System.out.println("That bet is too large! Betting max amount instead.");
+            bet += money;
+            money = 0;
+        } else
+        {
+            bet += amount;
+            money -= amount;
+        }
     }
-    
+
     // ---------------------------------------------------------------
     // Doubles the Player's bet
     // ---------------------------------------------------------------
     public void doubleBet()
     {
-	increaseBet(bet);
+        increaseBet(bet);
     }
-    
+
     // ---------------------------------------------------------------
     // Resets the Player's bet to 0
     // ---------------------------------------------------------------
     public void resetBet()
     {
-	bet = 0;
+        bet = 0;
     }
-    
+
     // ---------------------------------------------------------------
     // Returns the value of bet
     // ---------------------------------------------------------------
     public long getBet()
     {
-	return bet;
+        return bet;
     }
-    
+
     // ---------------------------------------------------------------
     // Returns the card at the desired index in hand
     // ---------------------------------------------------------------
     public Card cardInPos(int index)
     {
-	return hand.get(index);
+        return hand.get(index);
     }
 
     // ---------------------------------------------------------------
@@ -135,7 +136,7 @@ public class Player
     // ---------------------------------------------------------------
     public int cardsInHand()
     {
-	return hand.size();
+        return hand.size();
     }
 
     // ---------------------------------------------------------------
@@ -143,7 +144,7 @@ public class Player
     // ---------------------------------------------------------------
     public void removeCard()
     {
-	hand.remove(hand.size() - 1);
+        hand.remove(hand.size() - 1);
     }
 
     // ---------------------------------------------------------------
@@ -151,7 +152,7 @@ public class Player
     // ---------------------------------------------------------------
     public void addCard(Card c)
     {
-	hand.add(c);
+        hand.add(c);
     }
 
     // ---------------------------------------------------------------
@@ -160,8 +161,8 @@ public class Player
     // ---------------------------------------------------------------
     public void addCard(int suit, int value)
     {
-	Card c = new Card(suit, value);
-	hand.add(c);
+        Card c = new Card(suit, value);
+        hand.add(c);
     }
 
     // ---------------------------------------------------------------
@@ -169,6 +170,6 @@ public class Player
     // ---------------------------------------------------------------
     public void clearHand()
     {
-	hand = new ArrayList<Card>();
+        hand = new ArrayList<Card>();
     }
 }

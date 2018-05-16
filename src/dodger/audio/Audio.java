@@ -1,9 +1,8 @@
 package dodger.audio;
 
-import java.io.InputStream;
-
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Audio
 {
@@ -18,19 +17,19 @@ public class Audio
     // ---------------------------------------------------------------
     // Plays the .wav with the given name
     // ---------------------------------------------------------------
-    public void Play(String snd)
+    public static void Play(String snd)
     {
-	try
-	{
-	    InputStream inputStream = getClass().getResourceAsStream(snd + ".wav");
-
-	    AudioStream audioStream = new AudioStream(inputStream);
-
-	    AudioPlayer.player.start(audioStream);
-	} catch (Exception e)
-	{
-	    System.out.println("Problem with audio player.");
-	    e.printStackTrace();
-	}
+        try
+        {
+            Clip clip = AudioSystem.getClip();
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                    Audio.class.getResourceAsStream(snd + ".wav"));
+            clip.open(inputStream);
+            clip.start();
+        } catch (Exception e)
+        {
+            System.err.println("Problem with audio player.");
+            e.printStackTrace();
+        }
     }
 }

@@ -6,7 +6,6 @@ public class Deck
 {
     private Card[] deck;
     private int deckIndex = 0;
-    private Audio a = new Audio();
 
     // ---------------------------------------------------------------
     // Default constructor; Generates a complete deck of 52 unique
@@ -14,17 +13,17 @@ public class Deck
     // ---------------------------------------------------------------
     public Deck()
     {
-	deck = new Card[52];
-	int index = 0;
-	for (int i = 0; i < 4; i++)
-	{
-	    for (int j = 1; j < 14; j++)
-	    {
-		deck[index++] = new Card(i, j);
-	    }
+        deck = new Card[52];
+        int index = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 1; j < 14; j++)
+            {
+                deck[index++] = new Card(i, j);
+            }
 
-	}
-	Shuffle();
+        }
+        Shuffle();
     }
 
     // ---------------------------------------------------------------
@@ -32,14 +31,14 @@ public class Deck
     // ---------------------------------------------------------------
     public void Shuffle()
     {
-	for (int i = 0; i < 52; i++)
-	{
-	    int j = (int) (Math.random() * 52);
-	    Card tmp = deck[j];
-	    deck[j] = deck[i];
-	    deck[i] = tmp;
-	}
-	deckIndex = 0;
+        for (int i = 0; i < 52; i++)
+        {
+            int j = (int) (Math.random() * 52);
+            Card tmp = deck[j];
+            deck[j] = deck[i];
+            deck[i] = tmp;
+        }
+        deckIndex = 0;
     }
 
     // ---------------------------------------------------------------
@@ -47,12 +46,12 @@ public class Deck
     // ---------------------------------------------------------------
     public String toString()
     {
-	String d = "";
-	for (int i = 0; i < 52; i++)
-	{
-	    d = d + deck[i] + "\n";
-	}
-	return d;
+        String d = "";
+        for (int i = 0; i < 52; i++)
+        {
+            d = d + deck[i] + "\n";
+        }
+        return d;
     }
 
     // ---------------------------------------------------------------
@@ -61,7 +60,7 @@ public class Deck
     // ---------------------------------------------------------------
     public void returnCard()
     {
-	deckIndex--;
+        deckIndex--;
     }
 
     // ---------------------------------------------------------------
@@ -70,13 +69,13 @@ public class Deck
     // ---------------------------------------------------------------
     public Card draw()
     {
-	a.Play("draw");
-	if (deckIndex > 52)
-	{
-	    Shuffle();
-	    return draw();
-	}
-	return deck[deckIndex++];
+        Audio.Play("draw");
+        if (deckIndex > 52)
+        {
+            Shuffle();
+            return draw();
+        }
+        return deck[deckIndex++];
     }
 
     // ---------------------------------------------------------------
@@ -84,6 +83,6 @@ public class Deck
     // ---------------------------------------------------------------
     public int usedCards()
     {
-	return deckIndex;
+        return deckIndex;
     }
 }

@@ -20,9 +20,9 @@ public class Card
     // ---------------------------------------------------------------
     public Card()
     {
-	suitNum = (int) (Math.random() * 4);
-	value = 1 + (int) (Math.random() * 13);
-	Decode();
+        suitNum = (int) (Math.random() * 4);
+        value = 1 + (int) (Math.random() * 13);
+        Decode();
     }
 
     // ---------------------------------------------------------------
@@ -31,9 +31,9 @@ public class Card
     // ---------------------------------------------------------------
     public Card(int desiredSuit, int desiredValue)
     {
-	suitNum = desiredSuit;
-	value = desiredValue;
-	Decode();
+        suitNum = desiredSuit;
+        value = desiredValue;
+        Decode();
     }
 
     // ---------------------------------------------------------------
@@ -41,42 +41,42 @@ public class Card
     // ---------------------------------------------------------------
     private void Decode()
     {
-	if (suitNum == 0)
-	{
-	    suit = HEARTS;
-	}
+        if (suitNum == 0)
+        {
+            suit = HEARTS;
+        }
 
-	if (suitNum == 1)
-	{
-	    suit = DIAMONDS;
-	}
+        if (suitNum == 1)
+        {
+            suit = DIAMONDS;
+        }
 
-	if (suitNum == 2)
-	{
-	    suit = SPADES;
-	}
+        if (suitNum == 2)
+        {
+            suit = SPADES;
+        }
 
-	if (suitNum == 3)
-	{
-	    suit = CLUBS;
-	}
+        if (suitNum == 3)
+        {
+            suit = CLUBS;
+        }
 
-	if (value == 11)
-	{
-	    faceValue = "jack";
-	} else if (value == 12)
-	{
-	    faceValue = "queen";
-	} else if (value == 13)
-	{
-	    faceValue = "king";
-	} else if (value == 1)
-	{
-	    faceValue = "ace";
-	} else
-	{
-	    faceValue = Integer.toString(value);
-	}
+        if (value == 11)
+        {
+            faceValue = "jack";
+        } else if (value == 12)
+        {
+            faceValue = "queen";
+        } else if (value == 13)
+        {
+            faceValue = "king";
+        } else if (value == 1)
+        {
+            faceValue = "ace";
+        } else
+        {
+            faceValue = Integer.toString(value);
+        }
     }
 
     // ---------------------------------------------------------------
@@ -84,7 +84,7 @@ public class Card
     // ---------------------------------------------------------------
     public String getSuit()
     {
-	return suit;
+        return suit;
     }
 
     // ---------------------------------------------------------------
@@ -92,20 +92,20 @@ public class Card
     // ---------------------------------------------------------------
     public int getValue()
     {
-	return value;
+        return value;
     }
-    
+
     // ---------------------------------------------------------------
     // Returns the value of the Card as it would be in most games as
     // an integer.
     // ---------------------------------------------------------------
     public int getGameValue()
     {
-	if (value == 1)
-	{
-	    return 11;
-	}
-	return value;
+        if (value == 1)
+        {
+            return 11;
+        }
+        return value;
     }
 
     // ---------------------------------------------------------------
@@ -114,20 +114,20 @@ public class Card
     // ---------------------------------------------------------------
     public int getBlackjackValue(Player p)
     {
-	if (value > 10)
-	{
-	    return 10;
-	}
+        if (value > 10)
+        {
+            return 10;
+        }
 
-	if (value == 1)
-	{
-	    if (p.handValue() + 10 <= 21)
-	    {
-		return 11;
-	    }
-	}
+        if (value == 1)
+        {
+            if (p.handValue() + 10 <= 21)
+            {
+                return 11;
+            }
+        }
 
-	return value;
+        return value;
     }
 
     // ---------------------------------------------------------------
@@ -136,7 +136,7 @@ public class Card
     // ---------------------------------------------------------------
     public String getFaceValue()
     {
-	return faceValue;
+        return faceValue;
     }
 
     // ---------------------------------------------------------------
@@ -145,6 +145,6 @@ public class Card
     // ---------------------------------------------------------------
     public String toString()
     {
-	return faceValue + " of " + suit;
+        return faceValue + " of " + suit;
     }
 }
