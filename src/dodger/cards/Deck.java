@@ -4,8 +4,8 @@ import dodger.audio.Audio;
 
 public class Deck
 {
-    private Card[] deck;
-    private int deckIndex = 0;
+    protected Card[] deck;
+    protected int deckIndex = 0;
 
     // ---------------------------------------------------------------
     // Default constructor; Generates a complete deck of 52 unique
@@ -17,13 +17,22 @@ public class Deck
         int index = 0;
         for (int i = 0; i < 4; i++)
         {
-            for (int j = 1; j < 14; j++)
+            for (int j = 1; j <= 13; j++)
             {
                 deck[index++] = new Card(i, j);
             }
 
         }
         Shuffle();
+    }
+
+    // ---------------------------------------------------------------
+    // Constructor; Sets deck equal to the given card array
+    // DOES NOT SHUFFLE
+    // ---------------------------------------------------------------
+    public Deck(Card[] cards)
+    {
+        deck = cards;
     }
 
     // ---------------------------------------------------------------
@@ -70,7 +79,7 @@ public class Deck
     public Card draw()
     {
         Audio.Play("draw");
-        if (deckIndex > 52)
+        if (deckIndex > deck.length)
         {
             Shuffle();
             return draw();

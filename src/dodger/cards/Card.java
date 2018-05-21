@@ -1,13 +1,11 @@
 package dodger.cards;
 
-import dodger.blackjack.players.Player;
-
 public class Card
 {
-    private int value;
-    private int suitNum;
-    private String suit;
-    private String faceValue;
+    protected int value;
+    protected int suitNum;
+    protected String suit;
+    protected String faceValue;
 
     private final String HEARTS = "hearts";
     private final String DIAMONDS = "diamonds";
@@ -88,6 +86,14 @@ public class Card
     }
 
     // ---------------------------------------------------------------
+    // Returns the suitNum
+    // ---------------------------------------------------------------
+    public int getSuitNum()
+    {
+        return suitNum;
+    }
+
+    // ---------------------------------------------------------------
     // Returns the value of the Card as an integer
     // ---------------------------------------------------------------
     public int getValue()
@@ -105,28 +111,6 @@ public class Card
         {
             return 11;
         }
-        return value;
-    }
-
-    // ---------------------------------------------------------------
-    // Returns the value of the card according to the rules of
-    // Blackjack
-    // ---------------------------------------------------------------
-    public int getBlackjackValue(Player p)
-    {
-        if (value > 10)
-        {
-            return 10;
-        }
-
-        if (value == 1)
-        {
-            if (p.handValue() + 10 <= 21)
-            {
-                return 11;
-            }
-        }
-
         return value;
     }
 

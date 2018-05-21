@@ -2,12 +2,12 @@ package dodger.blackjack.players;
 
 import java.util.*;
 
-import dodger.cards.Card;
-import dodger.cards.Deck;
+import dodger.blackjack.BlackjackCard;
+import dodger.blackjack.BlackjackDeck;
 
 public class Player
 {
-    protected ArrayList<Card> hand = new ArrayList<Card>();
+    protected ArrayList<BlackjackCard> hand = new ArrayList<BlackjackCard>();
     protected long bet = 0;
     public long money;
 
@@ -23,7 +23,7 @@ public class Player
     // ---------------------------------------------------------------
     // Adds the top card of the deck to the Player's hand
     // ---------------------------------------------------------------
-    public void hit(Deck d)
+    public void hit(BlackjackDeck d)
     {
         hand.add(d.draw());
     }
@@ -38,7 +38,7 @@ public class Player
     {
         int value = 0;
         int aces = 0;
-        for (Card i : hand)
+        for (BlackjackCard i : hand)
         {
             if (i.getValue() == 1)
             {
@@ -126,7 +126,7 @@ public class Player
     // ---------------------------------------------------------------
     // Returns the card at the desired index in hand
     // ---------------------------------------------------------------
-    public Card cardInPos(int index)
+    public BlackjackCard cardInPos(int index)
     {
         return hand.get(index);
     }
@@ -150,7 +150,7 @@ public class Player
     // ---------------------------------------------------------------
     // Adds the specified Card to the Player's hand
     // ---------------------------------------------------------------
-    public void addCard(Card c)
+    public void addCard(BlackjackCard c)
     {
         hand.add(c);
     }
@@ -161,7 +161,7 @@ public class Player
     // ---------------------------------------------------------------
     public void addCard(int suit, int value)
     {
-        Card c = new Card(suit, value);
+        BlackjackCard c = new BlackjackCard(suit, value);
         hand.add(c);
     }
 
@@ -170,6 +170,6 @@ public class Player
     // ---------------------------------------------------------------
     public void clearHand()
     {
-        hand = new ArrayList<Card>();
+        hand = new ArrayList<BlackjackCard>();
     }
 }

@@ -1,8 +1,6 @@
 package dodger.audio;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 
 public class Audio
 {
@@ -26,6 +24,12 @@ public class Audio
                     Audio.class.getResourceAsStream(snd + ".wav"));
             clip.open(inputStream);
             clip.start();
+            clip.addLineListener(new LineListener() {
+                public void update(LineEvent le) {
+                    if (le.getType() == LineEvent.Type.STOP)
+                        clip.close();
+                }
+            });
         } catch (Exception e)
         {
             System.err.println("Problem with audio player.");

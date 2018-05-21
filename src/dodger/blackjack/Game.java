@@ -5,15 +5,14 @@ import java.util.Scanner;
 import dodger.blackjack.players.Dealer;
 import dodger.blackjack.players.Player;
 import dodger.blackjack.players.Split;
-import dodger.cards.Deck;
 
 public class Game
 {
-    Deck d = new Deck();
+    BlackjackDeck d = new BlackjackDeck();
     Player p;
     Split split;
     Dealer ai = new Dealer();
-    String input = "";
+    String input;
     Scanner scan = new Scanner(System.in);
 
     // ---------------------------------------------------------------
@@ -88,18 +87,24 @@ public class Game
         p.hit(d);
         ai.hit(d);
 
-        // Detecting if the player wins by Blackjack
+        // Detecting if anyone wins by Blackjack
         if (p.handValue() == 21 && ai.handValue() != 21)
         {
-            gameStatus();
+            gameStatusFinal();
             System.out.print("You got a blackjack! ");
             pVictory();
             return;
         } else if (p.handValue() == 21 && ai.handValue() == 21)
         {
-            gameStatus();
-            System.out.println("You both got blackjacks!");
+            gameStatusFinal();
+            System.out.println("You both got blackjacks! ");
             draw();
+            return;
+        } else if (ai.handValue() == 21 && p.handValue() != 21)
+        {
+            gameStatusFinal();
+            System.out.print("The Dealer got a blackjack! ");
+            aiVictory();
             return;
         }
 
@@ -203,11 +208,9 @@ public class Game
 
         // Dealer's turn
         // The Dealer is actually SUPER complex in its decision making
-        // The Dealer will hit as long as its hand's value is 17 or lower, or if it's too
-        // low to beat and/or tie the player.
+        // The Dealer will hit as long as its hand's value is 17 or lower
         // The Dealer can not split.
-        while (((ai.handValue() < p.handValue() || (ai.handValue() < split.handValue() && !split.isBusted())) || ai.handValue() <= 17)
-                && ai.handValue() != 21)
+        while (ai.handValue() < 17)
         {
             gameStatus();
 
@@ -216,29 +219,20 @@ public class Game
             System.out.println();
 
             ai.hit(d);
-
-            if (ai.handValue() > 21)
-            {
-                gameStatus();
-                System.out.println("The Dealer busted!");
-                pVictory();
-                return;
-            }
         }
 
-        if (split.cardsInHand() > 0)
-        {
-            System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
-            System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
-        } else
-        {
-            System.out.println("Your hand: " + p + ". Value: " + p.handValue());
-        }
-        System.out.println("The Dealer's hand: " + ai.toString(true) + ". Value: " + ai.handValue());
+        gameStatusFinal();
 
         // Checking to see who wins.
         // Defaults to Dealer winning if the player doesn't win and it's not a draw.
         // (In other words any wonky bullshit defaults to an Dealer victory)
+        if (ai.handValue() > 21)
+        {
+            System.out.println("The Dealer busted!");
+            pVictory();
+            return;
+        }
+
         if ((p.handValue() > ai.handValue() && p.handValue() <= 21)
                 || (split.handValue() > ai.handValue() && split.handValue() < 21))
         {
@@ -248,12 +242,6 @@ public class Game
 
         if (p.handValue() == ai.handValue() || split.handValue() == ai.handValue())
         {
-            if (ai.handValue() == 21 && ai.cardsInHand() == 2)
-            {
-                System.out.print("The Dealer had a blackjack! ");
-                aiVictory();
-                return;
-            }
             draw();
             return;
         } else
@@ -347,6 +335,22 @@ public class Game
         {
             System.out.println("Known value: " + ai.valueToString());
         }
+    }
+
+    // ---------------------------------------------------------------
+    // Returns the final values of each Player's hand
+    // ---------------------------------------------------------------
+    private void gameStatusFinal()
+    {
+        if (split.cardsInHand() > 0)
+        {
+            System.out.println("Your first hand: " + p + ". Value: " + p.handValue());
+            System.out.println("Your second hand: " + split + ". Value: " + split.handValue());
+        } else
+        {
+            System.out.println("Your hand: " + p + ". Value: " + p.handValue());
+        }
+        System.out.println("The Dealer's hand: " + ai.toString(true) + ". Value: " + ai.handValue());
     }
 
     // ---------------------------------------------------------------
