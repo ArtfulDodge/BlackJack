@@ -4,6 +4,7 @@
 *
 # but descend into directories
 !*/
-# Whitelist src
+# Whitelist
 !/src/**
+!README.md
 !.gitignore
