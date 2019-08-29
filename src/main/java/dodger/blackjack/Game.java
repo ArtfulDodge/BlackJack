@@ -21,8 +21,8 @@ public class Game
     // ---------------------------------------------------------------
     public Game() throws InterruptedException
     {
-        long startingAmt = 0;
-        do
+        long startingAmt = 1000;
+        /*do
         {
             System.out.println("How much money do you start with?");
             startingAmt = getNumericInput();
@@ -33,7 +33,7 @@ public class Game
                 Thread.sleep(2500);
             }
 
-        } while (startingAmt == 0);
+        } while (startingAmt == 0);*/
 
         p = new Player(startingAmt);
         split = new Split(p);
@@ -119,13 +119,17 @@ public class Game
             if (p.cardsInHand() == 2)
             {
                 if (p.cardInPos(0).getBlackjackValue(p) == p.cardInPos(1).getBlackjackValue(p)
-                        && split.cardsInHand() == 0)
+                        && split.cardsInHand() == 0 && p.getBet() <= p.money)
                 {
                     System.out.print("Hit, Stand, double down, or Split? (Note: Splitting will double your bet)");
 
-                } else
+                } else if (p.getBet() <= p.money)
                 {
                     System.out.print("Hit, Stand, or Double down?");
+                }
+                else
+                {
+                    System.out.print("Hit or Stand?");
                 }
             } else
             {
@@ -150,7 +154,7 @@ public class Game
             {
                 if (split.cardsInHand() == 0)
                 {
-                    gameStatus();
+                    gameStatusFinal();
                     System.out.println("You busted!");
                     aiVictory();
                     return;
@@ -193,12 +197,12 @@ public class Game
                 {
                     if (p.handValue() > 21)
                     {
-                        gameStatus();
+                        gameStatusFinal();
                         System.out.println("Both your hands busted!");
                         aiVictory();
                         return;
                     }
-
+                    gameStatus();
                     System.out.println("Your second hand busted!");
                     Thread.sleep(2500);
                 }
@@ -212,7 +216,7 @@ public class Game
         // The Dealer can not split.
         while (ai.handValue() < 17)
         {
-            gameStatus();
+            gameStatusFinal();
 
             Thread.sleep(2500);
 
@@ -275,21 +279,21 @@ public class Game
     // ---------------------------------------------------------------
     private void aiVictory()
     {
-        System.out.println("The Dealer wins the pot!");
-        ai.money += pot();
+        System.out.println("The Dealer wins the hand.");
+        ai.money += 2*pot();
         return;
     }
 
     private void pVictory()
     {
-        System.out.println("You win the pot!");
-        p.money += pot();
+        System.out.println("You win the hand!");
+        p.money += 2*pot();
         return;
     }
 
     private void draw()
     {
-        System.out.println("It's a draw!");
+        System.out.println("It's a push!");
         p.money += p.getBet() + split.getBet();
         return;
     }
@@ -297,18 +301,11 @@ public class Game
     // ---------------------------------------------------------------
     // Outputs the status of the pot.
     // ---------------------------------------------------------------
-    private void potStatus() throws InterruptedException
+    private void potStatus()
     {
-        System.out.println("The pot is now $" + pot());
-
-        Thread.sleep(1250);
+        System.out.println("Your bet is now $" + pot());
 
         ai.increaseBet(p.getBet() + split.getBet() - ai.getBet());
-        System.out.println();
-
-        System.out.println("The Dealer matched your bet!");
-        System.out.println("The pot is now $" + pot());
-
         System.out.println();
     }
 
@@ -333,7 +330,7 @@ public class Game
             System.out.println("Value: " + ai.valueToString());
         } else
         {
-            System.out.println("Known value: " + ai.valueToString());
+            System.out.println("Showing: " + ai.valueToString());
         }
     }
 
@@ -356,9 +353,9 @@ public class Game
     // ---------------------------------------------------------------
     // Reads the user's input and does the desired action
     // ---------------------------------------------------------------
-    private void doAction(String i, Player pl) throws InterruptedException
+    private void doAction(String i, Player pl)
     {
-        if (i.substring(0, 1).equalsIgnoreCase("d") && pl.cardsInHand() == 2)
+        if (i.substring(0, 1).equalsIgnoreCase("d") && p.getBet() <= p.money && pl.cardsInHand() == 2)
         {
             i = "stand";
             pl.doubleBet();
@@ -440,6 +437,6 @@ public class Game
     // ---------------------------------------------------------------
     private long pot()
     {
-        return ai.getBet() + p.getBet() + split.getBet();
+        return p.getBet() + split.getBet();
     }
 }

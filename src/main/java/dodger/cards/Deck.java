@@ -6,6 +6,7 @@ public class Deck
 {
     protected Card[] deck;
     protected int deckIndex = 0;
+    Audio aud = new Audio();
 
     // ---------------------------------------------------------------
     // Default constructor; Generates a complete deck of 52 unique
@@ -78,7 +79,7 @@ public class Deck
     // ---------------------------------------------------------------
     public Card draw()
     {
-        Audio.Play("draw");
+        aud.Play("draw");
         if (deckIndex > deck.length)
         {
             Shuffle();

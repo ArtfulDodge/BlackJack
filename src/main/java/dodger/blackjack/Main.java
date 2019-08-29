@@ -7,7 +7,7 @@ public class Main
     public static void main(String args[]) throws InterruptedException
     {
         Scanner scan = new Scanner(System.in);
-        String input = "";
+        String input;
         @SuppressWarnings("unused")
         Game g;
 
