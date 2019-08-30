@@ -1,12 +1,10 @@
 package dodger.cards;
 
-import dodger.audio.Audio;
-
 public class Deck
 {
     protected Card[] deck;
     protected int deckIndex = 0;
-    Audio aud = new Audio();
+    protected int deckSize = 52;
 
     // ---------------------------------------------------------------
     // Default constructor; Generates a complete deck of 52 unique
@@ -14,7 +12,7 @@ public class Deck
     // ---------------------------------------------------------------
     public Deck()
     {
-        deck = new Card[52];
+        deck = new Card[deckSize];
         int index = 0;
         for (int i = 0; i < 4; i++)
         {
@@ -41,9 +39,9 @@ public class Deck
     // ---------------------------------------------------------------
     public void Shuffle()
     {
-        for (int i = 0; i < 52; i++)
+        for (int i = 0; i < deckSize; i++)
         {
-            int j = (int) (Math.random() * 52);
+            int j = (int) (Math.random() * deckSize);
             Card tmp = deck[j];
             deck[j] = deck[i];
             deck[i] = tmp;
@@ -57,7 +55,7 @@ public class Deck
     public String toString()
     {
         String d = "";
-        for (int i = 0; i < 52; i++)
+        for (int i = 0; i < deckSize; i++)
         {
             d = d + deck[i] + "\n";
         }
@@ -79,7 +77,6 @@ public class Deck
     // ---------------------------------------------------------------
     public Card draw()
     {
-        aud.Play("draw");
         if (deckIndex > deck.length)
         {
             Shuffle();
@@ -94,5 +91,13 @@ public class Deck
     public int usedCards()
     {
         return deckIndex;
+    }
+
+    // ---------------------------------------------------------------
+    // Returns the size of the deck
+    // ---------------------------------------------------------------
+    public int getDeckSize()
+    {
+        return deckSize;
     }
 }

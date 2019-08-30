@@ -8,7 +8,7 @@ import dodger.blackjack.players.Split;
 
 public class Game
 {
-    BlackjackDeck d = new BlackjackDeck();
+    BlackjackDeck d = new BlackjackDeck(52*4);
     Player p;
     Split split;
     Dealer ai = new Dealer();
@@ -260,7 +260,7 @@ public class Game
     // ---------------------------------------------------------------
     private void reset()
     {
-        if (d.usedCards() >= 26)
+        if (d.usedCards() >= d.getDeckSize()/2)
         {
             d.Shuffle();
             System.out.println("The deck has been shuffled!");
@@ -353,7 +353,7 @@ public class Game
     // ---------------------------------------------------------------
     // Reads the user's input and does the desired action
     // ---------------------------------------------------------------
-    private void doAction(String i, Player pl)
+    private void doAction(String i, Player pl) throws InterruptedException
     {
         if (i.substring(0, 1).equalsIgnoreCase("d") && p.getBet() <= p.money && pl.cardsInHand() == 2)
         {
