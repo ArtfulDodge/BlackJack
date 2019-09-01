@@ -18,7 +18,7 @@ public class Split extends Player
     // ---------------------------------------------------------------
     public void increaseBet(long amount)
     {
-        if (money < amount)
+        if (play.money < amount)
         {
             System.out.println("That bet is too large! Betting max amount instead.");
             bet += play.money;
@@ -28,13 +28,5 @@ public class Split extends Player
             bet += amount;
             play.money -= amount;
         }
-    }
-
-    // ---------------------------------------------------------------
-    // Returns true if the Split is busted
-    // ---------------------------------------------------------------
-    public boolean isBusted()
-    {
-        return handValue() > 21;
     }
 }

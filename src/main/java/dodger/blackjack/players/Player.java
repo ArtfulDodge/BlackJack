@@ -51,12 +51,12 @@ public class Player
             {
                 value += i.getValue();
             }
+        }
 
-            while (value > 21 && aces > 0)
-            {
-                value -= 10;
-                aces -= 1;
-            }
+        while (value > 21 && aces > 0)
+        {
+            value -= 10;
+            aces -= 1;
         }
 
         return value;
@@ -171,5 +171,12 @@ public class Player
     public void clearHand()
     {
         hand = new ArrayList<BlackjackCard>();
+    }
+
+    // ---------------------------------------------------------------
+    // Returns true if the player is busted
+    // ---------------------------------------------------------------
+    public boolean isBusted() {
+        return handValue() > 21;
     }
 }

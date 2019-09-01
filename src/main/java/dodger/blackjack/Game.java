@@ -150,7 +150,7 @@ public class Game
 
             doAction(input, p);
 
-            if (p.handValue() > 21)
+            if (p.isBusted())
             {
                 if (split.cardsInHand() == 0)
                 {
@@ -161,6 +161,7 @@ public class Game
                 } else
                 {
                     gameStatus();
+                    p.resetBet();
                     System.out.println("Your first hand busted!");
                     System.out.println();
                     Thread.sleep(2500);
@@ -169,7 +170,7 @@ public class Game
             // Detects what their input starts with instead of the whole word as a
             // form of resilience against typos.
         } while ((input.substring(0, 1).equalsIgnoreCase("h") || input.substring(0, 2).equalsIgnoreCase("sp"))
-                && p.handValue() < 21);
+                && !p.isBusted());
 
         // Plays the second hand if the player decided to split. Does the same thing
         // as the first loop, minus giving the option to split.
@@ -193,9 +194,9 @@ public class Game
 
                 doAction(input, split);
 
-                if (split.handValue() > 21)
+                if (split.isBusted())
                 {
-                    if (p.handValue() > 21)
+                    if (p.isBusted())
                     {
                         gameStatusFinal();
                         System.out.println("Both your hands busted!");
@@ -203,11 +204,12 @@ public class Game
                         return;
                     }
                     gameStatus();
+                    split.resetBet();
                     System.out.println("Your second hand busted!");
                     Thread.sleep(2500);
                 }
             } while ((input.substring(0, 1).equalsIgnoreCase("h") || input.substring(0, 1).equalsIgnoreCase("sp"))
-                    && split.handValue() < 21);
+                    && !split.isBusted());
         }
 
         // Dealer's turn
@@ -230,16 +232,21 @@ public class Game
         // Checking to see who wins.
         // Defaults to Dealer winning if the player doesn't win and it's not a draw.
         // (In other words any wonky bullshit defaults to an Dealer victory)
-        if (ai.handValue() > 21)
+        if (ai.isBusted())
         {
             System.out.println("The Dealer busted!");
             pVictory();
             return;
         }
 
-        if ((p.handValue() > ai.handValue() && p.handValue() <= 21)
-                || (split.handValue() > ai.handValue() && split.handValue() < 21))
+        if ((p.handValue() > ai.handValue() && !p.isBusted())
+                || (split.handValue() > ai.handValue() && !split.isBusted()))
         {
+            if (p.handValue() < ai.handValue())
+                p.resetBet();
+            if (split.handValue() < ai.handValue())
+                split.resetBet();
+
             pVictory();
             return;
         }
